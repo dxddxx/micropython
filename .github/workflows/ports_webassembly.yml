@@ -31,3 +31,10 @@ jobs:
     - name: Print failures
       if: failure()
       run: tests/run-tests.py --print-failures
+      
+    # 👇 Add this step to save the WASM + JS output
+    - name: Upload WebAssembly artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: micropython-wasm
+        path: ports/webassembly/build/*
