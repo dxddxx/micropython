@@ -24,10 +24,8 @@ jobs:
       - name: Install packages
         run: source tools/ci.sh && ci_webassembly_setup
 
-      - name: Build WASM
-        run: |
-          source tools/ci.sh
-          make -C ports/webassembly
+      - name: Build
+        run: source tools/ci.sh && ci_webassembly_build
 
       - name: Run tests
         run: source tools/ci.sh && ci_webassembly_run_tests
@@ -38,12 +36,11 @@ jobs:
 
       - name: List build outputs
         run: |
-          echo "Listing files under ports/webassembly after build:"
-          find ports/webassembly -type f | sed 's/^/ - /'
+          echo "Searching for .wasm and .js files..."
+          find ports/webassembly -type f -name "micropython.*" || true
 
       - name: Upload WebAssembly artifacts
         uses: actions/upload-artifact@v4
         with:
           name: micropython-wasm
-          path: |
-            ports/webassembly/build-*/micropython.*
+          path: ports/webassembly/build-*/micropython.*
